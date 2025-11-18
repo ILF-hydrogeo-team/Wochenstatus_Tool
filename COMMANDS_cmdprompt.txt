@@ -1,0 +1,5 @@
+I:
+
+cd I:\ATIBK_Projects\R794\5_WS\58_GEOL\LA225_Monitoring_Phase_1_2\_WWBS_LA225\_mDB_VHT\Anpassung_mDB_ILF\Auswertungstool
+
+python WochenStatus_v1.py

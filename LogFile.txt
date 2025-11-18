@@ -1,0 +1,10 @@
+
+Anzahl Zeilen im Geodin Export: 6757
+
+Es liegt nicht genau 1 Datei in ImportSkript/woechentlich-eigene
+Für den wöchentlichen Bericht der ILF-Messstellen wurde die Datei "FP_KW45_PA6,8,9.xlsx" verwendet
+
+Es liegt nicht genau 1 Datei in ImportSkript/woechentlich-dritte
+Für den wöchentlichen Bericht der Messstellen Dritter wurde die Datei "FP_KW45_gesamt_MST_Dritte.xlsx" verwendet
+
+Skript finished: 20251112-155356
