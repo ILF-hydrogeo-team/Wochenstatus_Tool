@@ -20,21 +20,36 @@ LogfileText = ""
 
 
 # In[3]:
+def check_for_file(file_name: str, file_path: str):
+    '''
 
+    :param file_name: Name of file
+    :param file_path: Folder where file should be located
+    :return:
+    This function checks if the file exists or not. If not it returns an error. If it does, it returns the path
+    of the file.
+    '''
 
-try:
-    if 'Suedlink_MWuB_GWAnalytik.csv' in os.listdir("I:/ATIBK_Projects/R794/5_WS/58_GEOL/LA225_Monitoring_Phase_1_2/_WWBS_LA225/_mDB_VHT/Export_geodin-SQL/automatisch"):
-        geodinExportFilePath = "I:/ATIBK_Projects/R794/5_WS/58_GEOL/LA225_Monitoring_Phase_1_2/_WWBS_LA225/_mDB_VHT/Export_geodin-SQL/automatisch/Suedlink_MWuB_GWAnalytik.csv"
-except:
-    LogfileText = LogfileText+"\nKann den automatischen GeoDin Export nicht finden oder nicht darauf zugreifen unter\nI:/ATIBK_Projects/R794/5_WS/58_GEOL/LA225_Monitoring_Phase_1_2/_WWBS_LA225/_mDB_VHT/Export_geodin-SQL/automatisch/Suedlink_MWuB_GWAnalytik.csv\nVerwende stattdessen Datei im selben Verzeichnis wie in diesem Skript.\n"
+    full_path = f"{file_path}/{file_name}"
     try:
-        if 'Suedlink_MWuB_GWAnalytik.csv' in os.listdir("."):
-            geodinExportFilePath = "Suedlink_MWuB_GWAnalytik.csv"
-        else:
-            LogfileText = LogfileText+"\nKann Suedlink_MWuB_GWAnalytik.csv auch im selben Verzeichnis nicht finden (/nicht darauf zugreifen)\n"
+        if file_name in os.listdir(file_path):
+            new_path = full_path
     except:
-        LogfileText = LogfileText+"\nFehler im Abruf von Suedlink_MWuB_GWAnalytik.csv\n"
+        LogfileText = LogfileText + f"\nKann den automatischen GeoDin Export nicht finden oder nicht darauf zugreifen unter\n {full_path} \n Verwende stattdessen Datei im selben Verzeichnis wie in diesem Skript.\n"
+        try:
+            if file_name in os.listdir("."):
+                new_path = file_name
+            else:
+                LogfileText = LogfileText + f"\nKann {file_name} auch im selben Verzeichnis nicht finden (/nicht darauf zugreifen)\n"
+        except:
+            LogfileText = LogfileText + f"\nFehler im Abruf von {file_name}\n"
+    return new_path
 
+geodinExportFilePath = check_for_file(file_name = 'Suedlink_MWuB_GWAnalytik.csv',
+                                      file_path = r"I:/ATIBK_Projects/R794/5_WS/58_GEOL/LA225_Monitoring_Phase_1_2/_WWBS_LA225/_mDB_VHT/Export_geodin-SQL/automatisch")
+
+StammdatenFilePath = check_for_file(file_name = 'SQL-Abfrage_Suedlink_MWuB_GWStammdaten_mit OG_20251119_final.xlsx',
+                                    file_path = r"I:/ATIBK_Projects/R794/5_WS/58_GEOL/LA602_Monitoring_Phase_2_2/_WWBS_LA602/_mDB_VHT/SQL-Abfragen/_Testing")
 
 # In[4]:
 
@@ -121,6 +136,10 @@ try:
 
     LogfileText = LogfileText+"\nAnzahl Zeilen im Geodin Export: "+str(len(gd_LONGNAME))+"\n"
 
+    ####### make stammdaten into stammdaten_df
+
+    stammdaten_df = pd.read_excel(StammdatenFilePath)
+
 
     ####### COPY xlsx aus der Vorlage
 
@@ -134,7 +153,7 @@ try:
     Werteli = ['ab','wa','el','ph','o2']
     Parameterli = ['min','min20','max80','max','mittel','anzahl','letzter','aktuell']
 
-    dfcolimp = ['id','zeit-aktuell']
+    dfcolimp = ['querung', 'id','zeit-aktuell']
     for el1 in Werteli:
         for el2 in Parameterli:
             dfcolimp.append(el1+"-"+el2)
@@ -204,7 +223,12 @@ try:
     #Werteli = ['ab','wa','el','ph','o2']
     #Parameterli = ['min','min20','max80','max','mittel','anzahl','letzter','aktuell']
 
+    # QuerungsID einfüllen
+    mapping = stammdaten_df.set_index('LONGNAME')['BauwerksID']
+    df['querung'] = df['id'].map(mapping)
+
     for ID in df["id"]:
+
         # Kontrolliere ob überall Vorwerte
         mask = (gd_LONGNAME == ID)
         matching_dates = gd_ZEIT[mask]    
