@@ -64,7 +64,7 @@ try:
 
         # Process each line
         for line in lines:
-            # Split the line into fields using comma as the separator
+            # Split the line into fields using semicolon as the separator
             fields = line.strip().split(';')
             PRJ_ID.append(fields[0])
             LONGNAME.append(fields[1])
@@ -115,7 +115,7 @@ try:
         if len(gd_SMPTIME[i])>4:
             dt = datetime(year = int(gd_SMPDATE[i][6:10]), month = int(gd_SMPDATE[i][3:5]), day = int(gd_SMPDATE[i][0:2]), hour = int(gd_SMPTIME[i][0:2]), minute = int(gd_SMPTIME[i][3:5]))
         else:
-            dt = datetime(year = int(gd_SMPDATE[i][6:10]), month = int(gd_SMPDATE[i][3:5]), day = int(gd_SMPDATE[i][0:2]))
+            dt = datetime(year = int(gd_SMPDATE[i][6:10]), month = int(gd_SMPDATE[i][3:5]), day = int(gd_SMPDATE[i][0:2])) # TODO: Hier zufügen: Zeit!
         zeitli.append(dt)
     gd_ZEIT = np.array(zeitli)
 

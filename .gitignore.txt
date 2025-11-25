@@ -1,8 +1,15 @@
 # Ignore everything
 *
 
-# But not these files:
+# But don't ignore gitignore itself
+!.gitignore
+
+# Don't ignore Python files
 !*.py
 
-# Also keep the .gitignore file itself
-!.gitignore
+# Also keep folders so .py files inside them are tracked
+!*/
+
+# Ignore Jupyter notebook checkpoint files
+.ipynb_checkpoints/
+*.ipynb_checkpoints
